@@ -53,7 +53,11 @@ README.md`
 
 ## Continuamos la configuración de Dockerfile.
 
-- Damos la orden para instalar las dependencias dentro del contenedor.
+- Dentro del fichero Dockerfile damos la orden para instalar las dependencias dentro del contenedor.
   
   `RUN npm install`
+  
+- Le decimos que haga el build para que compile el proyecto creando la carpeta dist.
+
+  `RUN npm run build`
 
