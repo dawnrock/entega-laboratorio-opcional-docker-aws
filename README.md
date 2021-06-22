@@ -13,12 +13,12 @@ Dentro del fichero Dockerfile añadimos la siguiente configuración:
 
 - Al ser una aplicación Node debemos descargar su imágen oficial con las características mínimas (alpine) y versión 12. Esta imágen usa el sistema operativo Linux. 
 Para ello escribimos en el fichero el siguiente código:
-### `FROM node:12-alpine AS base`
+ `FROM node:12-alpine AS base`
 
 - El siguiente paso será crear un directorio dentro del contenedor dónde se alojará nuestra aplicación en nuestro sistema operativo virtual.
 Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después simplemente escribimos los comandos correspondientes para crear un drectorio en Linux.
-### `RUN mkdir -p /usr/app`
+ `RUN mkdir -p /usr/app`
 
 - Elegimos el directorio dónde vamos a trabajar con WORKDIR y la ruta dónde trabajaremos dentro del contenedor.
-### `WORKDIR /usr/app` 
+ `WORKDIR /usr/app` 
 
