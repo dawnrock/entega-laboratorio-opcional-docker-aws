@@ -33,23 +33,23 @@ Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después
 
 En este paso vamos a dejar un momento el fichero Dockerfile para crear un fichero nuevo llamado .dockerignore en el directorio raiz del proyecto. Sirve para decirle a Docker que ignore los ficheros que no necesitamos en nuestro contenedor. De esta manera, cuando le damos la orden de copiar en el paso anterior, le estamos pasando las pautas a seguir para omitirlos. Así quedaría nuestro fichero .dockerignore:
 
-`node_modules`
+`node_modules
 
-`.vscode`
+.vscode
 
-`dist`
+dist
 
-`.editorconfig`
+.editorconfig
 
-`.env`
+.env
 
-`.env.example`
+.env.example
 
-`.gitignore`
+.gitignore
 
-`package-lock.json`
+package-lock.json
 
-`README.md`
+README.md`
 
 ## Continuamos la configuración de Dockerfile.
 
