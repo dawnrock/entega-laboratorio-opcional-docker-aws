@@ -26,6 +26,7 @@ Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después
   `WORKDIR /usr/app` 
  
 - Necesitamos tener acceso a todos los ficheros del proyecto para poder hacer la build dentro del contenedor, para ello damos la orden de copiar todo el contenido del proyecto a nuestro directorio principal dentro del contenedor (/usr/app).
+
   `COPY ./ ./`
   
 ## Añadir fichero .dockerignore.
@@ -33,13 +34,21 @@ Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después
 En este paso vamos a dejar un momento el fichero Dockerfile para crear un fichero nuevo llamado .dockerignore en el directorio raiz del proyecto. Sirve para decirle a Docker que ignore los ficheros que no necesitamos en nuestro contenedor. De esta manera, cuando le damos la orden de copiar en el paso anterior, le estamos pasando las pautas a seguir para omitirlos. Así quedaría nuestro fichero .dockerignore:
 
 `node_modules`
+
 `.vscode`
+
 `dist`
+
 `.editorconfig`
+
 `.env`
+
 `.env.example`
+
 `.gitignore`
+
 `package-lock.json`
+
 `README.md`
 
 ## Continuamos la configuración de Dockerfile.
