@@ -36,19 +36,12 @@ En este paso vamos a dejar un momento el fichero Dockerfile para crear un ficher
 node_modules
 
 .vscode
-
 dist
-
 .editorconfig
-
 .env
-
 .env.example
-
 .gitignore
-
 package-lock.json
-
 README.md
 `
 
