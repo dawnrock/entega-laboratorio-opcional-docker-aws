@@ -33,7 +33,7 @@ Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después
 
 En este paso vamos a dejar un momento el fichero Dockerfile para crear un fichero nuevo llamado .dockerignore en el directorio raiz del proyecto. Sirve para decirle a Docker que ignore los ficheros que no necesitamos en nuestro contenedor. De esta manera, cuando le damos la orden de copiar en el paso anterior, le estamos pasando las pautas a seguir para omitirlos. Así quedaría nuestro fichero .dockerignore:
 
-`node_modules
+node_modules
 
 .vscode
 
@@ -49,7 +49,7 @@ dist
 
 package-lock.json
 
-README.md`
+README.md
 
 ## Continuamos la configuración de Dockerfile.
 
@@ -82,7 +82,7 @@ Para poder usar los ficheros de nuestro contenedor my-laboratory-app es necesari
 En este paso instalaremos nuestro servidor Node, para ello, creamos una carpeta nueva en nuestro directorio raíz y la llamaremos "server".
 Dentro de server añadimos un fichero que nombramos como index.js y lo configuramos de la siguiente forma:
 
-
+`
 const express = require('express');         
 const path = require('path');              
 
@@ -94,6 +94,8 @@ const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
   console.log(`App running on http://localhost:${PORT}`);
 });
+
+`
 
 Estamos indicando que usamos express y el directorio de nuestros ficheros estáticos, en este caso la carpeta dist. Y lo servimos en el puerto que nos llegue por entorno o predeterminadamente en el 8081.
 
