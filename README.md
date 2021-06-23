@@ -115,7 +115,7 @@ Sin salir del directorio server instalamos express como dependencia escribiendo 
 
 Veremos que además de instalar express como dependencia de producción en nuestro fichero server/package.json, estamos creando la carpeta node_modules correspondiente.
 
-## Comprobamos que el servidor express fucniona en local.
+## Comprobamos que el servidor express funciona en local.
 
 Compilamos el proyecto para crear la carpeta dist en local. Para ello es necesario mover el directorio de la carpeta server al directorio principal del proyecto.
 Escribimos `cd ..` en el terminal para movernos del directorio server al principal y a continuación el comando para hacer el compilado, `npm run build`.
