@@ -12,9 +12,9 @@ Una vez tenemos copiado el proyecto, creamos un archivo en el directorio princip
 Dentro del fichero Dockerfile añadimos la siguiente configuración:
 
 - Al ser una aplicación Node debemos descargar su imágen oficial con las características mínimas (alpine) y versión 12. Esta imágen usa el sistema operativo Linux. 
-Para ello escribimos en el fichero Dockerfile el siguiente código:
+Inicializamos con FROM y continuamos con la imágen y su versión.
 
-  `FROM node:12-alpine AS base`
+  `FROM node:12-alpine `
 
 - El siguiente paso será crear un directorio dentro del contenedor dónde se alojará nuestra aplicación en nuestro sistema operativo virtual.
 Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después simplemente escribimos los comandos correspondientes para crear un drectorio en Linux.
@@ -25,7 +25,7 @@ Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después
 
   `WORKDIR /usr/app` 
  
-- Necesitamos tener acceso a todos los ficheros del proyecto para poder hacer la build dentro del contenedor, para ello damos la orden de copiar todo el contenido del proyecto a nuestro directorio principal dentro del contenedor (/usr/app).
+- Necesitamos tener acceso a todos los ficheros del proyecto para poder hacer la build dentro del contenedor, para ello damos la orden de copiar todo el contenido del proyecto a nuestro directorio principal dentro del contenedor (/usr/app). Con el comando COPY damos la orden de copiar y con ./ estamos dándole tanto para el orígen como para el destino los directorios raíz de ambos.
 
   `COPY ./ ./`
   
@@ -61,3 +61,35 @@ README.md`
 
   `RUN npm run build`
 
+## Creamos la imágen.
+Escribimos el siguiente comando en el terminal (bash):
+  `docker build -t my-laboratory-app:1`
+Con ducker build damos crear la imágen y el tag -t sirve para darle el nombre que queramos (my-app). La versión se indica después 
+de los dos puntos (:1). 
+
+## Creamos el contenedor.
+Escribimos el siguiente comando en el terminal de nuevo.
+  `docker run -it my-laboratory-app:1 sh`
+Estamos dando la orden de crear el contenedor a partir de la imágen que indicamos junto a la versión. Además, con el comando `sh` abrimos la consola bash dentro de nuestro
+contendor creado. De esta manera podemos comprobar que se han creado los ficheros correctamente.
+
+## Creamos el servidor web.
+Para poder usar los ficheros de nuestro contenedor my-laboratory-app es necesario crear un servidor web para servir nuestros ficheros estáticos.
+En este paso instalaremos nuestro servidor Node, para ello, creamos una carpeta nueva en nuestro directorio raíz y la llamaremos "server".
+Dentro de server añadimos un fichero que nombramos como index.js y lo configuramos de la siguiente forma:
+
+`const express = require('express');
+const path = require('path');
+
+const app = express();
+const staticFilesPath = path.resolve(__dirname, './public');
+app.use('/', express.static(staticFilesPath));
+
+app.use('/api/hello', async(req,res) => {
+  res.send("Custom API endpoint");
+})
+
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+  console.log(`App running on http://localhost:${PORT}`);
+});`
