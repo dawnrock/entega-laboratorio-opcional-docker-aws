@@ -117,10 +117,14 @@ Veremos que además de instalar express como dependencia de producción en nuest
 
 ## Comprobamos que el servidor express fucniona en local.
 
-Compilamos el proyecto para crear la carpeta dist en local. Es necesario mover el directorio de la carpeta server al directorio principal del proyecto.
-Para ello escribimos `cd ..` en el terminal.
-Y a continuación el comando para hacer el compilado, `npm run build`.
+Compilamos el proyecto para crear la carpeta dist en local.
+Es necesario mover el directorio de la carpeta server al directorio principal del proyecto.
+
+Para ello escribimos `cd ..` en el terminal.Y a continuación el comando para hacer el compilado, `npm run build`.
+
 Por último, para ejecutar el fichero index.js de nuestra carpeta server Node nos proporciona un comando para levantar el proyecto desde local `node server`.
+
 Veremos que la consola nos informa con el siguiente texto: `App running on http://localhost:8081`.
+
 Si abrimos el portal http://localhost:8081 en nuestro explorador veremos el proyecto levantado en local.
 
