@@ -68,30 +68,54 @@ Con ducker build damos crear la imágen y el tag -t sirve para darle el nombre q
 de los dos puntos (:1). 
 
 ## Creamos el contenedor.
+
 Escribimos el siguiente comando en el terminal de nuevo.
+
   `docker run -it my-laboratory-app:1 sh`
+  
 Estamos dando la orden de crear el contenedor a partir de la imágen que indicamos junto a la versión. Además, con el comando `sh` abrimos la consola bash dentro de nuestro
 contendor creado. De esta manera podemos comprobar que se han creado los ficheros correctamente.
 
 ## Creamos el servidor web.
+
 Para poder usar los ficheros de nuestro contenedor my-laboratory-app es necesario crear un servidor web para servir nuestros ficheros estáticos.
 En este paso instalaremos nuestro servidor Node, para ello, creamos una carpeta nueva en nuestro directorio raíz y la llamaremos "server".
 Dentro de server añadimos un fichero que nombramos como index.js y lo configuramos de la siguiente forma:
 
-`
-const express = require('express');
-const path = require('path');
+
+const express = require('express');         
+const path = require('path');              
 
 const app = express();
-const staticFilesPath = path.resolve(__dirname, './public');
+const staticFilesPath = path.resolve(__dirname, '../dist');
 app.use('/', express.static(staticFilesPath));
-
-app.use('/api/hello', async(req,res) => {
-  res.send("Custom API endpoint");
-})
 
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
   console.log(`App running on http://localhost:${PORT}`);
 });
-`
+
+Estamos indicando que usamos express y el directorio de nuestros ficheros estáticos, en este caso la carpeta dist. Y lo servimos en el puerto que nos llegue por entorno o predeterminadamente en el 8081.
+
+## Agregamos package.json al servidor web.
+
+Escribimos `cd server` en el terminal para mover nuestro directorio a esa carpeta y trabajar en ella. 
+Y a continuación el comando para crear el fichero package.json `npm init -y`.
+
+## Añadimos express como dependencia de producción.
+
+Sin salir del directorio server instalamos express como dependencia escribiendo el siguiente código en el terminal:
+
+`npm install express --save`
+
+Veremos que además de instalar express como dependencia de producción en nuestro fichero server/package.json, estamos creando la carpeta node_modules correspondiente.
+
+## Comprobamos que el servidor express fucniona en local.
+
+Compilamos el proyecto para crear la carpeta dist en local. Es necesario mover el directorio de la carpeta server al directorio principal del proyecto.
+Para ello escribimos `cd ..` en el terminal.
+Y a continuación el comando para hacer el compilado, `npm run build`.
+Por último, para ejecutar el fichero index.js de nuestra carpeta server Node nos proporciona un comando para levantar el proyecto desde local `node server`.
+Veremos que la consola nos informa con el siguiente texto: `App running on http://localhost:8081`.
+Si abrimos el portal http://localhost:8081 en nuestro explorador veremos el proyecto levantado en local.
+
