@@ -82,20 +82,23 @@ Para poder usar los ficheros de nuestro contenedor my-laboratory-app es necesari
 En este paso instalaremos nuestro servidor Node, para ello, creamos una carpeta nueva en nuestro directorio raíz y la llamaremos "server".
 Dentro de server añadimos un fichero que nombramos como index.js y lo configuramos de la siguiente forma:
 
-`
-const express = require('express');         
+const express = require('express');   
+
 const path = require('path');              
 
 const app = express();
+
 const staticFilesPath = path.resolve(__dirname, '../dist');
+
 app.use('/', express.static(staticFilesPath));
 
 const PORT = process.env.PORT || 8081;
+
 app.listen(PORT, () => {
   console.log(`App running on http://localhost:${PORT}`);
 });
 
-`
+
 
 Estamos indicando que usamos express y el directorio de nuestros ficheros estáticos, en este caso la carpeta dist. Y lo servimos en el puerto que nos llegue por entorno o predeterminadamente en el 8081.
 
