@@ -7,4 +7,6 @@ COPY ./ ./
 RUN npm install
 RUN npm run build
 
-
+RUN cd server
+RUN npm install
+ENTRYPOINT [ "node", "server" ]
