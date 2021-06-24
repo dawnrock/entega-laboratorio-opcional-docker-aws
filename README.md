@@ -140,9 +140,10 @@ Dentro de la carpeta server realizamos la instalación de dependencias de nuestr
 `ENTRYPOINT [ "node", "server" ]`
 
 En este caso en vez de RUN usamos el comando ENTRYPOINT para arrancar el servidor, ¿por qué? El comando RUN se ejecuta justo cuando se cree la imágen, y nosotros queremos 
-levantar diferentes contenedores a partir de esa imágen. Por lo tanto queremos que se ejecute cuando se levante el/los contenedor/es.
+levantar diferentes contenedores a partir de esa imágen. Por lo tanto queremos que se ejecute sólo cuando se levante el/los contenedor/es.
 Le damos el punto de entrada con el término `"node"` y la ubicación `"server"` refiriendonos a la carpeta. Hay que tener presente que este paso se ejecuta en el WORKDIR, directorio principal de nuestra aplicación dentro del container (/usr/app).
-Si escribimos en la consola (bash) el comando `docker build -t my-laboratory-app:1` veremos como al crear el nuevo contenedor se ejecuta en local
+Si escribimos en la consola (bash) el comando `docker build -t my-laboratory-app:1 .` veremos cómo sea crea el contenedor y ejecuta el servidor.
+Para comprobar que se ha levantado el servidor dentro del contenedor correctamente escribimos `docker run my-laboratory-app:1`, la consola mostrará el mensaje `App running on http://localhost:8081` indicandonos que se ha levantado correctamente. ¿Por qué no puedo ver la página (ERR_CONNECTION_REFUSED)? Es debido a que no tenemos acceso desde nuestra página.
 
 
 
