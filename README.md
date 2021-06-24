@@ -2,7 +2,7 @@
 
 Vamos a crear una imágen del proyecto para poder iniciar contenedores Docker a partir de ella.
 
-## Descargar el directorio que contiene nuestro bundler de producción.
+## Descargar el directorio que contiene el bundler de producción.
 
 https://github.com/Lemoncode/master-frontend-lemoncode/tree/master/07-cloud/01-basic/01-production-bundle
 
@@ -61,13 +61,13 @@ README.md
 
   `RUN npm run build`
 
-## Creamos la imágen.
+## Crear la imágen.
 Escribimos el siguiente comando en el terminal (bash):
   `docker build -t my-laboratory-app:1`
 Con ducker build damos crear la imágen y el tag -t sirve para darle el nombre que queramos (my-app). La versión se indica después 
 de los dos puntos (:1). 
 
-## Creamos el contenedor.
+## Crear contenedor.
 
 Escribimos el siguiente comando en el terminal de nuevo.
 
@@ -76,7 +76,7 @@ Escribimos el siguiente comando en el terminal de nuevo.
 Estamos dando la orden de crear el contenedor a partir de la imágen que indicamos junto a la versión. Además, con el comando `sh` abrimos la consola bash dentro de nuestro
 contendor creado. De esta manera podemos comprobar que se han creado los ficheros correctamente.
 
-## Creamos el servidor web.
+## Crear servidor web.
 
 Para poder usar los ficheros de nuestro contenedor my-laboratory-app es necesario crear un servidor web para servir nuestros ficheros estáticos.
 En este paso instalaremos nuestro servidor Node, para ello, creamos una carpeta nueva en nuestro directorio raíz y la llamaremos "server".
@@ -102,12 +102,12 @@ app.listen(PORT, () => {
 
 Estamos indicando que usamos express y el directorio de nuestros ficheros estáticos, en este caso la carpeta dist. Y lo servimos en el puerto que nos llegue por entorno o predeterminadamente en el 8081.
 
-## Agregamos package.json al servidor web.
+## Agregar package.json al servidor web.
 
 Escribimos `cd server` en el terminal para mover nuestro directorio a esa carpeta y trabajar en ella. 
 Y a continuación el comando para crear el fichero package.json `npm init -y`.
 
-## Añadimos express como dependencia de producción.
+## Añadir express como dependencia de producción.
 
 Sin salir del directorio server instalamos express como dependencia escribiendo el siguiente código en el terminal:
 
@@ -115,7 +115,7 @@ Sin salir del directorio server instalamos express como dependencia escribiendo 
 
 Veremos que además de instalar express como dependencia de producción en nuestro fichero server/package.json, estamos creando la carpeta node_modules correspondiente.
 
-## Comprobamos que el servidor express fucniona en local.
+## Comprobar que el servidor express funciona en local.
 
 Compilamos el proyecto para crear la carpeta dist en local. Para ello es necesario mover el directorio de la carpeta server al directorio principal del proyecto.
 Escribimos `cd ..` en el terminal para movernos del directorio server al principal y a continuación el comando para hacer el compilado, `npm run build`.
@@ -124,4 +124,27 @@ Para ejecutar el fichero index.js de nuestra carpeta server, Node nos proporcion
 Veremos que la consola nos informa con el siguiente texto: `App running on http://localhost:8081`. 
 
 Abriendo http://localhost:8081 en nuestro explorador veremos el proyecto levantado en local.
+
+## Crear servidor express dentro del contenedor.
+
+Volver al archivo Dockerfile y añadir los siguientes comandos:
+
+`RUN cd server` 
+
+Le decimos a nuestro container que mueva el directorio de trabajo a la carpeta server.
+
+`RUN npm install`
+
+Dentro de la carpeta server realizamos la instalación de dependencias de nuestro servidor.
+
+`ENTRYPOINT [ "node", "server" ]`
+
+En este caso en vez de RUN usamos el comando ENTRYPOINT para arrancar el servidor, ¿por qué? El comando RUN se ejecuta justo cuando se cree la imágen, y nosotros queremos 
+levantar diferentes contenedores a partir de esa imágen. Por lo tanto queremos que se ejecute cuando se levante el/los contenedor/es.
+Le damos el punto de entrada con el término `"node"` y la ubicación `"server"` refiriendonos a la carpeta. Hay que tener presente que este paso se ejecuta en el WORKDIR, directorio principal de nuestra aplicación dentro del container (/usr/app).
+Si escribimos en la consola (bash) el comando `docker build -t my-laboratory-app:1` veremos como al crear el nuevo contenedor se ejecuta en local
+
+
+
+
 
