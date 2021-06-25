@@ -1,6 +1,7 @@
 # Laboratorio opcional Docker-AWS.
 
-Vamos a crear una imágen del proyecto para poder iniciar contenedores Docker a partir de ella.
+Vamos a crear una imágen del proyecto para poder iniciar contenedores Docker a partir de ella. Es importante tener isntalado Docker en nuestra máquina además
+de estar logeado.
 
 ## Descargar el directorio que contiene el bundler de producción.
 
@@ -140,10 +141,40 @@ Dentro de la carpeta server realizamos la instalación de dependencias de nuestr
 `ENTRYPOINT [ "node", "server" ]`
 
 En este caso en vez de RUN usamos el comando ENTRYPOINT para arrancar el servidor, ¿por qué? El comando RUN se ejecuta justo cuando se cree la imágen, y nosotros queremos 
-levantar diferentes contenedores a partir de esa imágen. Por lo tanto queremos que se ejecute cuando se levante el/los contenedor/es.
-Le damos el punto de entrada con el término `"node"` y la ubicación `"server"` refiriendonos a la carpeta. Hay que tener presente que este paso se ejecuta en el WORKDIR, directorio principal de nuestra aplicación dentro del container (/usr/app).
-Si escribimos en la consola (bash) el comando `docker build -t my-laboratory-app:1` veremos como al crear el nuevo contenedor se ejecuta en local
+levantar diferentes contenedores a partir de esa imágen. Por lo tanto queremos que se ejecute sólo cuando se levante el/los contenedor/es.
 
+Le damos el punto de entrada con el término `"node"` y la ubicación `"server"` refiriendonos a la carpeta. Hay que tener presente que este paso se ejecuta en el WORKDIR, directorio principal de nuestra aplicación dentro del container (/usr/app).
+Si escribimos en la consola (bash) el comando `docker build -t my-laboratory-app:1 .` veremos cómo sea crea el contenedor y ejecuta el servidor.
+
+Para comprobar que se ha levantado el servidor dentro del contenedor correctamente escribimos `docker run my-laboratory-app:1`, la consola mostrará el mensaje `App running on http://localhost:8081` indicandonos que se ha levantado correctamente. ¿Por qué no puedo ver la página (ERR_CONNECTION_REFUSED)? Es debido a que no tenemos acceso desde nuestra página.
+
+## Exponer puerto de acceso.
+
+Volver al fichero Dockerfile y añadir el siguiente código a continuación de `RUN npm install`:
+
+`ENV PORT=8083`
+
+Declaramos un puerto en la variable de entorno.
+
+`EXPOSE port 8083`
+
+Y lo exponemos.
+
+## Comprobar cambios en la compilación.
+ 
+Necesitamos parar el contenedor y crear uno nuevo. Escribir en la consola (bash) `docker stop` + primeros 4 valores del código del contenedor. Para ver estos códigos
+es necesario escribir en consola `docker ps -a` dónde apareceran tanto los contenedores que estén arrancados como los parados.
+
+Una vez parado el contenedor escribir de nuevo en la consola `docker build -t my-laboratory-app:1 .` para sobreescribir la versión de nuestro contenedor.
+De nuevo levantamos la imágen creando un nuevo contenedor en la consola con `docker run`, con la diferencia que ahora debemos añadir la configuración de puertos al invocarlo.
+Para ello necesitamos pasarle en primer lugar el puerto del contenedor que queremos exponer, en este caso el 8080. Y para terminar el puerto que hemos expuesto desde local en el 
+fichero Dockerfile (8083).
+
+Además podemos añadir el tag `--rm` justo antes de la configuración del puerto para que se elimine automáticamente el contenedor al pararse.
+
+Asi quedaría el comando:  `docker run --rm -p 8080:8083 my-laboratory-app:1`.
+
+Para comprobarlo escribimos `http://localhost:8080/` en nuestro explorador.
 
 
 
