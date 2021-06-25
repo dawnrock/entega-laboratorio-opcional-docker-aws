@@ -174,8 +174,12 @@ Además podemos añadir el tag `--rm` justo antes de la configuración del puert
 
 Asi quedaría el comando:  `docker run --rm -p 8080:8083 my-laboratory-app:1`.
 
-Para comprobarlo escribimos `http://localhost:8080/` en nuestro explorador.
+Para comprobarlo escribimos `http://localhost:8080/` en nuestro explorador. Además si escribimos en la consola `docker ps` veremos el contenedor levantado con la información
+de los puertos, ID, state, etc.
 
+Escribiendo `docker images` en la consola apareceran las imagenes sin uso con el tag <none>. Si queremos eliminar dichas imagenes escribimos en consola `docker image prune`.
+
+Viendo el tamaño que ocupa la imágen (362MB) necesitamos eliminar los ficheros de node_modules y demás que no necesitemos para quedarnos sólo con los ficheros estáticos de nuestro proyecto.
 
 
 
