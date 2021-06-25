@@ -9,4 +9,8 @@ RUN npm run build
 
 RUN cd server
 RUN npm install
+
+ENV PORT=8083
+EXPOSE 8083
+
 ENTRYPOINT [ "node", "server" ]
