@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const staticFilesPath = path.resolve(__dirname, '../dist');
+const staticFilesPath = path.resolve(__dirname, process.env.STATIC_FILES_PATH);
 app.use('/', express.static(staticFilesPath));
 
 
