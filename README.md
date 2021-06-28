@@ -172,7 +172,9 @@ fichero Dockerfile (8083).
 
 Además podemos añadir el tag `--rm` justo antes de la configuración del puerto para que se elimine automáticamente el contenedor al pararse.
 
-Asi quedaría el comando:  `docker run --rm -p 8080:8083 my-laboratory-app:1`.
+Asi quedaría el comando:  
+
+`docker run --rm -p 8080:8083 my-laboratory-app:1`
 
 Para comprobarlo escribimos `http://localhost:8080/` en nuestro explorador. Además si escribimos en la consola `docker ps` veremos el contenedor levantado con la información
 de los puertos, ID, state, etc.
@@ -181,5 +183,56 @@ Escribiendo `docker images` en la consola apareceran las imagenes sin uso con el
 
 Viendo el tamaño que ocupa la imágen (362MB) necesitamos eliminar los ficheros de node_modules y demás que no necesitemos para quedarnos sólo con los ficheros estáticos de nuestro proyecto.
 
+## Quitar peso a la imágen.
+ 
+En este paso vamos a dividir la creación de nuestra imágen en fases, de esta manera podemos elegir el momento para realizar las acciones que más nos convega y borrar los ficheros creados en fases anteriores quitando peso a nuestro proyecto.
 
+Empezamos siempre ejecutando los tres primeros pasos, arrancar desde la imágen de node, crear directorio y mover el directorio de trabajo al que acabamos de crear.
+Para ello vamos al fichero `Dockerfile` de nuevo y modificamos el primer paso `FROM` para que quede así:
+  
+  `FROM node:12-alpine AS base`
+  
+  `RUN mkdir -p /usr/app`
+  
+  `WORKDIR /usr/app`
+
+Creamos una fase nueva que se llamará build-front, aqui será donde ejecutaremos los pasos ya descritos para copiar los ficheros del proyecto al contenedor, instalar node_modules y hacer la build. Así quedaría:
+  
+  `FROM base AS build-front`
+  
+  `COPY ./ ./`
+  
+  `RUN npm install`
+  
+  `RUN npm run build`
+
+Añadimos la fase de despliegue:
+
+  `FROM base AS release`
+
+Para poder copiar el resultado de la fase anterior (necesitamos la carpeta this de la fase `build-front`) le pasamos el nombre de la fase dónde hemos creado nuestros ficheros
+estáticos (build-front), la ruta donde se encuentra la carpeta que queremos copiar (/usr/app/dist) y el destino, la carpeta public (./public):
+  
+  `COPY --from=build-front /usr/app/dist ./public`
+  
+Al ser una nueva fase tenemos el contenedor vacío, por lo que necesitamos la parte del server. Copiar el fichero package.json de server (de la fase base) al directorio raíz:
+  
+  `COPY ./server/package.json ./`
+  
+Además necesitaremos el fichero index.js, dónde se encuentra el servidor express:
+  
+  `COPY ./server/index.js ./`
+  
+
+Instalamos las dependencias pero indicamos que sólo las de producción:
+  
+  `RUN npm install --only=production`
+  
+## Crear variable de entorno. Al cambiar la ruta de nuestro proyecto a la carpeta public necesitamos ir al fichero de nuestro servidor express (/server/index.js) y alimentar
+mediante una variable de entorno la ruta a la carpeta que teniamos predefinidia ('../dist').
+  
+Para ello vamos a línea dónde hemos creado la ruta de ficheros estáticos (staticFilesPath) y sustituimos `'../dist'` por `process.env`.
+  
+
+  
 
