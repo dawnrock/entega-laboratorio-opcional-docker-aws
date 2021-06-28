@@ -259,3 +259,45 @@ Para ello vamos a línea dónde hemos creado la ruta de ficheros estáticos (sta
   Si queremos arrancar la imágen en modo "background" para que no muestre detalles en consola podemos añadir el flag `-d`, quedando así el comando para arrancar en modo background:
   
   `docker run -d --rm -p 8080:8083 my-laboratory-app:2`
+  
+  
+## Desplegar imágen en el registro oficial de Docker (Dockerhub).
+
+  Para este paso es necesario estar logeado en Dockerhub con nuestro usuario. Si no lo estamos ya, escribimos en consola `docker login`.
+  
+- Cambiar nombre de la imágen para que coincida con la ruta de usuario/imágen en Dockerhub. Escribimos `docker tag` seguido de la imágen que queremos renombrar y terminando
+con el nuevo nombre de la imágen:
+  
+  `docker tag my-laboratory-app:2 dawnrock/my-laboratory-app`
+
+- Para desplegar la imágen solo tenemos que escribir el comando `docker push dawnrock/my-laboratory-app` en la consola. De esta manera estaríamos subiendo la imágen al repositorio de nuestra página de usuario.
+  
+  
+## Crear nueva versión.
+  
+- En esta nueva versión vamos a actualizar los puertos del fichero Dockerfile. Quedando de esta manera:
+  
+  `ENV PORT=8000`
+  
+  `EXPOSE 8000`
+  
+- Compilamos de nuevo la imágen para crear su versión 3:
+  
+  `docker build -t my-laboratory-app:3 .`
+
+- Volvemos a renombrar para subirla a DockerHub:
+  
+  `docker tag my-laboratory-app:3 dawnrock/my-laboratory-app`
+  
+- Y hacemos de nuevo el push a nuestro repositorio:
+  
+    `docker push dawnrock/my-laboratory-app:3`
+ 
+## Borrar imagenes que no necesitamos.
+  
+  Para ello usamos el comando `docker rmi --force` seguido de los cuatro primeros carácteres de la ID de la imágen, se pueden borrar varias dejando un espacio de separación entre ellas. En principio vamos a borrar todas las imágenes para luego descargar del repositorio sólo la que queremos usar.
+  
+  Para descargar la imágen del repositorio simplemente hacemos un docker run pero esta vez cambiando el puerto del contenedor por el 8000:
+  
+    `docker run -d --rm -p 8080:8000 dawnrock/my-laboratory-app:3`
+  
