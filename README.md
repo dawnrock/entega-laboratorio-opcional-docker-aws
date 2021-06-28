@@ -233,7 +233,7 @@ Copiar fichero index.js, dónde se encuentra el servidor express:
   
 ## Crear variable de entorno. 
   
-  Al cambiar la ruta de nuestro proyecto a la carpeta public necesitamos ir al fichero de nuestro servidor express (/server/index.js) y alimentar
+  Al cambiar la ruta de nuestro proyecto a la carpeta `./public` necesitamos ir al fichero de nuestro servidor express (/server/index.js) y alimentar
 mediante una variable de entorno la ruta a la carpeta que teniamos predefinidia ('../dist').
   
 Para ello vamos a línea dónde hemos creado la ruta de ficheros estáticos (staticFilesPath) y sustituimos `'../dist'` por `process.env.STATIC_FILES_PATH`.
