@@ -355,3 +355,10 @@ con el nuevo nombre de la imágen:
   Importante elegir el puerto de entrada del contenedor que hemos configurado anteriormente `80` y el puerto de la versión 3 de nuestro contenedor `8000`. Veremos como al no tener la imágen la descargará automáticamente.
   
   `sudo docker run --rm -d -p 80:8000 dawnrock/my-laboratory-app:3`
+
+- Comprobamos si está el contenedor andando mediante la consola de nuestra máquina virtual:
+  
+  `sudo docker ps`
+  
+  Al volver a la página AWS, justo en el último paso para conectar, hacer click en  el código generado de "ID de la instancia". Nos llevará a otra página con los detalles de la instancia. En el centro nos aparecerá un par de direcciones, la IP del servidor "35.180.190.77", y el dominio con DNS "ec2-35-180-190-77.eu-west-3.compute.amazonaws.com" .
+  Haciendo click en cualquiera de las dos veremos que nos abre la página con protocolo https, al haber habilitado sólo el puerto `80` debemos modificar manualmente la dirección en el explorador borrando la "s" final dejando el protocolo http y poder acceder a ella (se podría habilitar el puerto 443 para el protocolo https pero necesitariamos certitificados).
