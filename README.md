@@ -301,3 +301,52 @@ con el nuevo nombre de la imágen:
   
     `docker run -d --rm -p 8080:8000 dawnrock/my-laboratory-app:3`
   
+## Desplegar en Amazon.
+  
+  En este paso es necesario registrarse en la página de AWS, https://aws.amazon.com/. Una vez estemos logeados con nuestra cuenta buscamos en la cabecera de la página la pestaña de servicios. Dentro del apartado "Informática" hacemos click en "EC2", es el nombre que tienen las máquinas virtuales de Amazon. Es importante elegir también el servidor que esté más cerca de nuestra ubicación, si miramos en la cabecera nos aparecerá una localización predefinida, al hacer click podemos cambiarla por la que más nos interese.
+  
+  Abrimos una estancia nueva, en la página de nuestra consola EC2 veremos un botón con el texto "Launch instance" o "Lanzar instancia" si tenemos la página traducida, hacemos click para lanzarla. Ahora se nos abre una serie de pasos de configuración para nuestra máquina:
+  
+- 1º. Elegir una imágen de Amazon Machine. 
+  Escogemos la opción de Amazon Linux (nuestro archivo Dockerfile está configurado en código Linux).
+  
+- 2º. Elegir un tipo de istancia. 
+  Seleccionamos "t2.micro" "free tier elegible" para usar un tier gratuito, normalmente está seleccionado de forma predefinida.
+  
+- 3º. Configuración de los detalles de la instancia. 
+  Dejamos la configuración tal y como está.
+  
+- 4º. Adición de almacenamiento. 
+  Dejamos la configuración tal y como está.
+
+- 5º. Agregar etiquetas. 
+  Dejamos la configuración tal y como está.  
+  
+- 6º. Configuración de grupos de seguridad. 
+  Éste es el apartado más importante, ya que será dónde expondremos nuestros puertos al exterior para poder acceder a nuestra máquina AWS. Añadimos un regla nueva haciendo clcik en el botón "Añadir regla". El tipo de nuestra nueva regla será el que venga predefinido (Regla TCP personalizada). 
+  El protocolo será TCP. En el rango de puertos escribimos `80`, ya que es el puerto dónde se expone nuestro servidor web. Y por último en el apartado origen configuramos de forma que sea disponible el acceso para todas las IP que nos vengan del exterior, escribir `0.0.0.0/0`. 
+
+- 7º. Lanzar la instancia. 
+  Aparecerá un aviso que nos informará de la ausencia del par de claves de seguridad. En la pestaña "Elegir un par de claves existente" seleccionamos la opción de "Continuar sin un par de claves", además de marcar la casilla de consentimiento.
+  
+  Haciendo click en "Ver instancias" veremos nuestra instancia levantada en AWS con nuestra máquina virtual. Para conectarnos primero marcamos la casilla que tiene a su izquierda, luego hacemos click en la pestaña "Acciones" y seleccionamos la opción "Conectar". En el siguiente paso "Conectarse a la instancia" usaremos la consola de Amazon, así que hacemos directamente click en "Conectar".
+  
+## Configuración mediante terminal de la máquina virtual Linux.
+  
+  Al ser una máquina en limpio necesitamos instalar docker para poder ejecutar un contenedor a partir de nuestra imágen de DockerHub.
+  
+- Actualizar aplicaciones ya instaladas:
+  
+  `sudo yum update -y`
+  
+- Instalamos docker:
+  
+  `sudo amazon-linux-extras install docker`
+  
+- En la consola nos pedirá confirmar (Is this ok [y/d/N]), confirmamos:
+  
+  `y`
+  
+- Ejecutamos el servicio de docker:
+  
+  `sudo service docker start`
