@@ -323,7 +323,7 @@ con el nuevo nombre de la imágen:
   Dejamos la configuración tal y como está.  
   
 - 6º. Configuración de grupos de seguridad. 
-  Éste es el apartado más importante, ya que será dónde expondremos nuestros puertos al exterior para poder acceder a nuestra máquina AWS. Añadimos un regla nueva haciendo clcik en el botón "Añadir regla". El tipo de nuestra nueva regla será el que venga predefinido (Regla TCP personalizada). 
+  Este es el apartado más importante, ya que será dónde expondremos nuestros puertos al exterior para poder acceder a nuestra máquina AWS. Añadimos un regla nueva haciendo clcik en el botón "Añadir regla". El tipo de nuestra nueva regla será el que venga predefinido (Regla TCP personalizada). 
   El protocolo será TCP. En el rango de puertos escribimos `80`, ya que es el puerto dónde se expone nuestro servidor web. Y por último en el apartado origen configuramos de forma que sea disponible el acceso para todas las IP que nos vengan del exterior, escribir `0.0.0.0/0`. 
 
 - 7º. Lanzar la instancia. 
@@ -350,3 +350,8 @@ con el nuevo nombre de la imágen:
 - Ejecutamos el servicio de docker:
   
   `sudo service docker start`
+
+- Ejecutamos el nuevo contenedor. 
+  Importante elegir el puerto de entrada del contenedor que hemos configurado anteriormente `80` y el puerto de la versión 3 de nuestro contenedor `8000`. Veremos como al no tener la imágen la descargará automáticamente.
+  
+  `sudo docker run --rm -d -p 80:8000 dawnrock/my-laboratory-app:3`
