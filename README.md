@@ -1,6 +1,6 @@
 # Laboratorio opcional Docker-AWS.
 
-  Vamos a crear una imágen del proyecto para poder iniciar contenedores Docker a partir de ella. Es importante tener isntalado Docker en nuestra máquina además
+  Vamos a crear una imágen del proyecto para poder iniciar contenedores Docker a partir de ella. Es importante tener instalado Docker en nuestra máquina además
 de estar logeado.
 
 ## Descargar el directorio que contiene el bundler de producción.
