@@ -1,6 +1,6 @@
 # Laboratorio opcional Docker-AWS.
 
-  Vamos a crear una imágen del proyecto para poder iniciar contenedores Docker a partir de ella. Es importante tener instalado Docker en nuestra máquina además
+  Vamos a crear una imagen del proyecto para poder iniciar contenedores Docker a partir de ella. Es importante tener instalado Docker en nuestra máquina además
 de estar logeado.
 
 ## Descargar el directorio que contiene el bundler de producción.
@@ -12,8 +12,8 @@ https://github.com/Lemoncode/master-frontend-lemoncode/tree/master/07-cloud/01-b
   Una vez tenemos copiado el proyecto, creamos un archivo en el directorio principal que llamaremos Dockerfile para crear nuestras imagenes custom.
 Dentro del fichero Dockerfile añadimos la siguiente configuración:
 
-- Al ser una aplicación Node debemos descargar su imágen oficial con las características mínimas (alpine) y versión 12. Esta imágen usa el sistema operativo Linux. 
-Inicializamos con FROM y continuamos con la imágen y su versión.
+- Al ser una aplicación Node debemos descargar su imagen oficial con las características mínimas (alpine) y versión 12. Esta imagen usa el sistema operativo Linux. 
+Inicializamos con FROM y continuamos con la imagen y su versión.
 
   `FROM node:12-alpine `
 
@@ -26,7 +26,7 @@ Para poder ejecutar un comando dentro del contenedor iniciamos con RUN. Después
 
   `WORKDIR /usr/app` 
  
-- Necesitamos tener acceso a todos los ficheros del proyecto para poder hacer la build dentro del contenedor, para ello damos la orden de copiar todo el contenido del proyecto a nuestro directorio principal dentro del contenedor (/usr/app). Con el comando COPY damos la orden de copiar y con ./ estamos dándole tanto para el orígen como para el destino los directorios raíz de ambos.
+- Necesitamos tener acceso a todos los ficheros del proyecto para poder hacer la build dentro del contenedor, para ello damos la orden de copiar todo el contenido del proyecto a nuestro directorio principal dentro del contenedor (/usr/app). Con el comando COPY damos la orden de copiar y con ./ estamos dándole tanto para el origen como para el destino los directorios raíz de ambos.
 
   `COPY ./ ./`
   
@@ -62,13 +62,13 @@ README.md
 
   `RUN npm run build`
 
-## Crear la imágen.
+## Crear la imagen.
 
 Escribimos el siguiente comando en el terminal (bash):
 
   `docker build -t my-laboratory-app:1`
 
-  Con docker build damos crear la imágen y el tag -t sirve para darle el nombre que queramos (my-app). La versión se indica después 
+  Con docker build damos crear la imagen y el tag -t sirve para darle el nombre que queramos (my-app). La versión se indica después 
 de los dos puntos (:1). 
 
 ## Crear contenedor.
@@ -143,7 +143,7 @@ Dentro de la carpeta server realizamos la instalación de dependencias de nuestr
 
 `ENTRYPOINT [ "node", "server" ]`
 
-  En este caso en vez de RUN usamos el comando ENTRYPOINT para arrancar el servidor, ¿por qué? El comando RUN se ejecuta justo cuando se cree la imágen, y nosotros queremos 
+  En este caso en vez de RUN usamos el comando ENTRYPOINT para arrancar el servidor, ¿por qué? El comando RUN se ejecuta justo cuando se cree la imagen, y nosotros queremos 
 levantar diferentes contenedores a partir de esa imágen. Por lo tanto queremos que se ejecute sólo cuando se levante el/los contenedor/es.
 
   Le damos el punto de entrada con el término `"node"` y la ubicación `"server"` refiriendonos a la carpeta. Hay que tener presente que este paso se ejecuta en el WORKDIR, directorio principal de nuestra aplicación dentro del container (/usr/app).
@@ -184,13 +184,13 @@ de los puertos, ID, state, etc.
 
 Escribiendo `docker images` en la consola apareceran las imagenes sin uso con el tag <none>. Si queremos eliminar dichas imagenes escribimos en consola `docker image prune`.
 
-  Viendo el tamaño que ocupa la imágen (362MB) necesitamos eliminar los ficheros de node_modules y demás que no necesitemos para quedarnos sólo con los ficheros estáticos de nuestro proyecto.
+  Viendo el tamaño que ocupa la imagen (362MB) necesitamos eliminar los ficheros de node_modules y demás que no necesitemos para quedarnos sólo con los ficheros estáticos de nuestro proyecto.
 
 ## Quitar peso a la imágen.
  
-  En este paso vamos a dividir la creación de nuestra imágen en fases, de esta manera podemos elegir el momento para realizar las acciones que más nos convega y borrar los ficheros creados en fases anteriores quitando peso a nuestro proyecto.
+  En este paso vamos a dividir la creación de nuestra imagen en fases, de esta manera podemos elegir el momento para realizar las acciones que más nos convega y borrar los ficheros creados en fases anteriores quitando peso a nuestro proyecto.
 
-- Empezamos siempre ejecutando los tres primeros pasos, arrancar desde la imágen de node, crear directorio y mover el directorio de trabajo al que acabamos de crear.
+- Empezamos siempre ejecutando los tres primeros pasos, arrancar desde la imagen de node, crear directorio y mover el directorio de trabajo al que acabamos de crear.
 Para ello vamos al fichero `Dockerfile` de nuevo y modificamos el primer paso `FROM` para que quede así:
   
   `FROM node:12-alpine AS base`
@@ -250,11 +250,11 @@ Para ello vamos a línea dónde hemos creado la ruta de ficheros estáticos (sta
   
 -  Escribir el comando `docker build -t my-laboratory-app:2 .`  para crear la nueva versión (2) de nuestro proyecto. 
   
--  Comprobar la creación y el tamaño de la imágen con `docker images`. Veremos como hemos reducido su tamaño casi en una cuarta parte respecto a su versión 1.
+-  Comprobar la creación y el tamaño de la imagen con `docker images`. Veremos como hemos reducido su tamaño casi en una cuarta parte respecto a su versión 1.
   
 - Parar el contenedor de la versión anterior con `docker stop my-laboratory-app:1`, ya que estamos usando los mismos puertos.
   
-- Arrancar la nueva imágen con `docker run --rm -p 8080:8083 my-laboratory-app:2`.
+- Arrancar la nueva imagen con `docker run --rm -p 8080:8083 my-laboratory-app:2`.
   
   Si queremos arrancar la imágen en modo "background" para que no muestre detalles en consola podemos añadir el flag `-d`, quedando así el comando para arrancar en modo background:
   
@@ -265,12 +265,12 @@ Para ello vamos a línea dónde hemos creado la ruta de ficheros estáticos (sta
 
   Para este paso es necesario estar logeado en Dockerhub con nuestro usuario. Si no lo estamos ya, escribimos en consola `docker login`.
   
-- Cambiar nombre de la imágen para que coincida con la ruta de usuario/imágen en Dockerhub. Escribimos `docker tag` seguido de la imágen que queremos renombrar y terminando
-con el nuevo nombre de la imágen:
+- Cambiar nombre de la imagen para que coincida con la ruta de usuario/imagen en Dockerhub. Escribimos `docker tag` seguido de la imagen que queremos renombrar y terminando
+con el nuevo nombre:
   
   `docker tag my-laboratory-app:2 dawnrock/my-laboratory-app`
 
-- Para desplegar la imágen solo tenemos que escribir el comando `docker push dawnrock/my-laboratory-app` en la consola. De esta manera estaríamos subiendo la imágen al repositorio de nuestra página de usuario.
+- Para desplegar la imagen solo tenemos que escribir el comando `docker push dawnrock/my-laboratory-app` en la consola. De esta manera estaríamos subiendo la imagen al repositorio de nuestra página de usuario.
   
   
 ## Crear nueva versión.
@@ -295,9 +295,9 @@ con el nuevo nombre de la imágen:
  
 ## Borrar imagenes que no necesitamos.
   
-  Para ello usamos el comando `docker rmi --force` seguido de los cuatro primeros carácteres de la ID de la imágen, se pueden borrar varias dejando un espacio de separación entre ellas. En principio vamos a borrar todas las imágenes para luego descargar del repositorio sólo la que queremos usar.
+  Para ello usamos el comando `docker rmi --force` seguido de los cuatro primeros carácteres de la ID de la imagen, se pueden borrar varias dejando un espacio de separación entre ellas. En principio vamos a borrar todas las imágenes para luego descargar del repositorio sólo la que queremos usar.
   
-  Para descargar la imágen del repositorio simplemente hacemos un docker run pero esta vez cambiando el puerto del contenedor por el 8000:
+  Para descargar la imagen del repositorio simplemente hacemos un docker run pero esta vez cambiando el puerto del contenedor por el 8000:
   
     `docker run -d --rm -p 8080:8000 dawnrock/my-laboratory-app:3`
   
@@ -333,7 +333,7 @@ con el nuevo nombre de la imágen:
   
 ## Configuración mediante terminal de la máquina virtual Linux.
   
-  Al ser una máquina en limpio necesitamos instalar docker para poder ejecutar un contenedor a partir de nuestra imágen de DockerHub.
+  Al ser una máquina en limpio necesitamos instalar docker para poder ejecutar un contenedor a partir de nuestra imagen de DockerHub.
   
 - Actualizar aplicaciones ya instaladas:
   
@@ -352,7 +352,7 @@ con el nuevo nombre de la imágen:
   `sudo service docker start`
 
 - Ejecutamos el nuevo contenedor. 
-  Importante elegir el puerto de entrada del contenedor que hemos configurado anteriormente `80` y el puerto de la versión 3 de nuestro contenedor `8000`. Veremos como al no tener la imágen la descargará automáticamente.
+  Importante elegir el puerto de entrada del contenedor que hemos configurado anteriormente `80` y el puerto de la versión 3 de nuestro contenedor `8000`. Veremos como al no tener la imagen la descargará automáticamente.
   
   `sudo docker run --rm -d -p 80:8000 dawnrock/my-laboratory-app:3`
 
@@ -361,4 +361,5 @@ con el nuevo nombre de la imágen:
   `sudo docker ps`
   
   Al volver a la página AWS, justo en el último paso para conectar, hacer click en  el código generado de "ID de la instancia". Nos llevará a otra página con los detalles de la instancia. En el centro nos aparecerá un par de direcciones, la IP del servidor "35.180.190.77", y el dominio con DNS "ec2-35-180-190-77.eu-west-3.compute.amazonaws.com" .
+  
   Haciendo click en cualquiera de las dos veremos que nos abre la página con protocolo https, al haber habilitado sólo el puerto `80` debemos modificar manualmente la dirección en el explorador borrando la "s" final dejando el protocolo http y poder acceder a ella (se podría habilitar el puerto 443 para el protocolo https pero necesitariamos certitificados).
