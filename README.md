@@ -68,7 +68,7 @@ Escribimos el siguiente comando en el terminal (bash):
 
   `docker build -t my-laboratory-app:1`
 
-  Con docker build damos crear la imagen y el tag -t sirve para darle el nombre que queramos (my-app). La versión se indica después 
+  Con docker build damos crear la imagen y el tag -t sirve para darle el nombre que queramos (my-laboratory-app). La versión se indica después 
 de los dos puntos (:1). 
 
 ## Crear contenedor.
